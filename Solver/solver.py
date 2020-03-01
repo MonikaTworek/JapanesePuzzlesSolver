@@ -13,11 +13,16 @@ rows = [[2, 2], [4, 4], [10], [10], [10], [10], [8], [6], [4], [2]]
 
 
 def draw():
-    print("Nothing")
+    for i in range(height):
+        print(table[i])
 
 
 def is_in_progress():
-    return True
+    for i in range(width):
+        for j in range(height):
+            if table[i][j] is None:
+                return True
+    return False
 
 
 def color_boxes():
@@ -26,22 +31,25 @@ def color_boxes():
         counter = 0
         type = 0
         last_is_zero = False
-        for number in columns[col]:
+        ### sprawdzić, czy jak jest puste, a my jesteśmy w trybie zaznacz jakby kolor (type %2 = 0), to przesuń się o tyle ile jest już wykreślone
+        ### sprawdzić, czy jeżeli jest coś zakolorowane, to możemy to dokończyć...
+        for number in rows[col]:
             for j in range(number):
                 mask[col][counter] = type
                 counter += 1
             last_is_zero = False
-            if counter + 1 < height: #co jak mam dokładnie i dodanie pustego miałoby wyjść poza?
+            if counter < height: #co jak mam dokładnie i dodanie pustego miałoby wyjść poza?
                 type += 1
                 mask[col][counter] = type
                 counter += 1
                 last_is_zero = True
+                type += 1
 
         #idziemy od drgiej strony i sprawdzamy, czy typy się zgadzają
         pointer = height - 1
-        temp = reversed(columns[col])
+        temp = reversed(rows[col])
         if last_is_zero:
-            type -= 1
+            type -= 2
 
         for number in temp:
             for j in range(number):
@@ -62,22 +70,23 @@ def color_boxes():
         counter = 0
         type = 0
         last_is_zero = False
-        for number in rows[col]:
+        for number in columns[col]:
             for j in range(number):
                 mask[counter][col] = type
                 counter += 1
             last_is_zero = False
-            if counter + 1 < width: #co jak mam dokładnie i dodanie pustego miałoby wyjść poza?
+            if counter < width: #co jak mam dokładnie i dodanie pustego miałoby wyjść poza?
                 type += 1
                 mask[counter][col] = type
                 counter += 1
                 last_is_zero = True
+                type += 1
 
         #idziemy od drgiej strony i sprawdzamy, czy typy się zgadzają
         pointer = width - 1
-        temp = reversed(rows[col])
+        temp = reversed(columns[col])
         if last_is_zero:
-            type -= 1
+            type -= 2
 
         for number in temp:
             for j in range(number):
